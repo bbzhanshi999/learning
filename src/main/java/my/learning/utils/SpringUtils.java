@@ -1,4 +1,4 @@
-package my.learning.mongdb.utils;
+package my.learning.utils;
 
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -17,6 +17,5 @@ public class SpringUtils {
     public static <T> T getBean(String beanName, Class<T> requiredType){
         return classPathXmlApplicationContext.getBean(beanName,requiredType);
     }
-
 
 }

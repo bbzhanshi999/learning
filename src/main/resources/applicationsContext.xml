@@ -11,8 +11,12 @@
           http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd">
     <context:annotation-config/>
-    <context:component-scan base-package="my"/>
-    <mongo:mongo-client id="client"  host="127.0.0.1" port="27017"></mongo:mongo-client>
+    <context:component-scan base-package="my.learning.mongdb"/>
+
+    <!--配置mongoClient对象-->
+    <mongo:mongo-client id="client"  host="127.0.0.1" port="27017">
+        <mongo:client-options connect-timeout="1"/>
+    </mongo:mongo-client>
 
 
 </beans>

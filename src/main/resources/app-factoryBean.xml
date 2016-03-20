@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config></context:annotation-config>
+    <context:component-scan base-package="my.learning.factorybean"></context:component-scan>
+    <context:property-placeholder  location="classpath:carapp.properties"></context:property-placeholder>
+
+    <!--配置静态工厂的方法-->
+    <bean id="car1" class="my.learning.factorybean.factory.StaticCarFactory" factory-method="getCar">
+        <constructor-arg name="brand" value="audi"/>
+    </bean>
+
+
+    <!--实例工厂配置方式-->
+    <bean id="carFactory" class="my.learning.factorybean.factory.InstatnceCarFactory"></bean>
+    <bean id="car2" factory-bean="carFactory" factory-method="getCar">
+        <constructor-arg  value="bmw"></constructor-arg>
+    </bean>
+
+    <!--factoryBean模式-->
+    <bean id="car3" class="my.learning.factorybean.factory.CarFactoryBean">
+        <!--设置属性值在代码中通过@value实现-->
+        <!--<property name="brand" value="ford"/>
+        <property name="price" value="1000554.124"/>-->
+    </bean>
+</beans>

@@ -1,5 +1,6 @@
 package my.learning.mongdb.main;
 
+import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -8,13 +9,20 @@ import com.mongodb.client.MongoDatabase;
 
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
+import my.learning.factorybean.entity.Car;
+import my.learning.mongdb.entity.Persons;
 import my.learning.mongdb.service.MongoService;
-import my.learning.mongdb.utils.SpringUtils;
+import my.learning.utils.SpringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bson.Document;
 import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+
 
 import java.util.Arrays;
 
@@ -23,7 +31,29 @@ import static com.mongodb.client.model.Filters.*;
 public class MyMongoApp {
 
     public static Log log = LogFactory.getLog(MyMongoApp.class);
-    public static  MongoDatabase mydb;
+    public static MongoDatabase mydb;
+    public static Mongo mongo;
+
+
+    /**
+     * 测试mongoDbFactory的使用
+     */
+    @Test
+    public void SimpleMongoDbFactoryTest(){
+
+        MongoService mongoService = SpringUtils.getBean("mongoService", MongoService.class);
+        MongoClient mongoClient = mongoService.getClient();
+        MongoOperations mongoOps = new MongoTemplate(new SimpleMongoDbFactory(mongoClient,"mydb"));
+        //Persons person1 = mongoOps.findOne(new Query(Criteria.where("name").is("zhangsan")), Persons.class);
+        Persons person =
+                mongoOps.findOne(new Query(Criteria.where("name").is("zhangsan")),
+                                                        Persons.class,"persons");//指定表名
+        mongoOps.insert(new Persons("user",25));/*如不指定对应collection，用类名小写对应表名*/
+        mongoOps.insert(new Persons("user",25),"persons");/*插入时直接对应表名*/
+        System.out.println(person);
+
+    }
+
 
 
     @Test
@@ -32,6 +62,13 @@ public class MyMongoApp {
         MongoService mongoService = SpringUtils.getBean("mongoService", MongoService.class);
         MongoClient mongoClient = mongoService.getClient();
         System.out.println(mongoClient.getDatabase("mydb").getCollection("persons").find().first().toJson());
+    }
+
+
+    @Test
+    public void mongofactoryBeanTest(){
+        mongo = SpringUtils.getBean("mongo", Mongo.class);
+        System.out.println(mongo.getClass());
     }
 
     @Test
