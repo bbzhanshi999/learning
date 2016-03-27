@@ -1,20 +1,27 @@
 package my.learning.mongdb.entity;
 
-import com.mongodb.MongoClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/3/18 0018.
  */
+@Document(collection = "persons")
 public class Persons {
 
+    public Persons(String name, int age, String[] books, List<School> school) {
+        this.name = name;
+        this.age = age;
+        this.books = books;
+        this.school = school;
+    }
 
+    public Persons(){};
 
-
+    @Id
     private String id;
     private String name;
     private int age;
@@ -65,5 +72,9 @@ public class Persons {
 
     public void setSchool(List<School> school) {
         this.school = school;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

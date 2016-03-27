@@ -8,6 +8,11 @@ public class School {
     private String school;
     private String score;
 
+    public School(String school, String score) {
+        this.school = school;
+        this.score = score;
+    }
+
     public String getSchool() {
         return school;
     }
